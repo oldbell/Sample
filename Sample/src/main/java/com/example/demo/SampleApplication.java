@@ -1,7 +1,10 @@
 package com.example.demo;
 
+import java.util.Collection;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 
 @SpringBootApplication
 public class SampleApplication {
@@ -21,7 +24,7 @@ public class SampleApplication {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		SpringApplication.run(SampleApplication.class, args);
+		SpringApplication.run( SampleApplication.class, args) ;
 	}
 
 }

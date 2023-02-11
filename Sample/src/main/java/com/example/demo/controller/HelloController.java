@@ -16,8 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.example.demo.mv.service.ThredServiceImpl;
+import com.example.demo.mv.service.ThredServiceImpl2;
+
 @RestController
 public class HelloController {
+
+	ThredServiceImpl oT = new ThredServiceImpl();
+	ThredServiceImpl2 oT2 = new ThredServiceImpl2();
 
 	/**
 	 * p29
@@ -40,6 +46,27 @@ public class HelloController {
 		String from= req.getParameter("from");
 		if ( from == null ) from = "";
 		return "info - from :" + from;
+	}
+	
+	@RequestMapping("/start")
+	public void TestRunning()
+	{
+		oT.start();
+		oT2.start();
+	}
+	
+	@RequestMapping("/stop")
+	public void TestStop()
+	{
+		oT.stop();
+	}
+	
+	
+	@RequestMapping("/end")
+	public void TestEnd()
+	{
+		oT.end();
+		oT2.end();
 	}
 	
 	
