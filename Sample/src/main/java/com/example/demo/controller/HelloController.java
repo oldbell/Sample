@@ -23,7 +23,7 @@ import com.example.demo.mv.service.ThredServiceImpl2;
 public class HelloController {
 
 	ThredServiceImpl oT = new ThredServiceImpl();
-	ThredServiceImpl2 oT2 = new ThredServiceImpl2();
+	ThredServiceImpl oT2 = new ThredServiceImpl();
 
 	/**
 	 * p29
@@ -51,6 +51,9 @@ public class HelloController {
 	@RequestMapping("/start")
 	public void TestRunning()
 	{
+//		oT.setName("T1");
+//		oT2.setName("T2");
+		
 		oT.start();
 		oT2.start();
 	}

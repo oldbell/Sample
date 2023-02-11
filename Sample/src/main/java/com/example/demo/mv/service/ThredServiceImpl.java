@@ -26,8 +26,22 @@ public class ThredServiceImpl implements ThreadService, ServletContextListener, 
     @Setter
     private boolean isShutdown = false;	
 
+    @Getter
+    private String name ;
+    
     /** context */
     private ServletContext sc;    
+    
+    
+    public ThredServiceImpl()
+    {
+    	
+    }
+
+    public void setName(String name)
+    {
+    	this.name = name;
+    }
     
     /** 컨텍스트 초기화 시 데몬 스레드를 작동한다 */
     public void contextInitialized (ServletContextEvent event) {
@@ -39,10 +53,15 @@ public class ThredServiceImpl implements ThreadService, ServletContextListener, 
     
     public void start()
     {
-    	log.info("start()");
+    	log.info(String.format("%s.start()", this.name ));
     	this.work = true;
     	this.isShutdown = false;
-    	if ( this.thread == null ) this.thread = new Thread(this,"Daemon thread for background task");
+    	if ( this.thread == null ) 
+    	{
+    		this.thread = new Thread(this);
+    		this.thread.setDaemon(true);
+    		if ( this.name != null ) this.thread.setName(this.name);
+    	}
     	
     	log.info( String.format( "Thread Status : %s", this.thread.getState().name() ));
     	log.info( String.format( "Thread isAlive : %b", this.thread.isAlive() ));
@@ -60,23 +79,29 @@ public class ThredServiceImpl implements ThreadService, ServletContextListener, 
 
     		if ( this.thread.getState().compareTo( State.WAITING) == 0 )
     		{
-    			this.thread.notify();
-    			log.info("thread.notify() 실행함");	
+            	synchronized ( this.thread ) {
+                	log.info("thread.notify() 실행");
+        			this.thread.notify();
+					log.info("thread.notify() 실행 완료");
+            	}            	
     		}
     	}
     }
     
     public void stop()
     {
+    	if ( this.thread == null ) return ;
     	log.info( String.format( "Thread Status : %s", this.thread.getState().name() ));
     	if ( this.thread.getState().compareTo( State.TIMED_WAITING ) == 0 )
     	{
+        	log.info( String.format( "----- %s try work stop()", this.thread.getName() ));
     		this.work = false;
     	}
     }
     
     public void end()
     {
+    	log.info( String.format( "----- %s try thread end()", this.thread.getName() ));
     	this.work = false;
     	this.isShutdown = true;
     }
@@ -90,19 +115,27 @@ public class ThredServiceImpl implements ThreadService, ServletContextListener, 
         	if ( this.isShutdown ) break;
         	if (  ! this.work ) 
         	{
-            	log.info( String.format( "Pre Join Thread Status : %s", this.thread.getState().name() ));
-        		try {this.thread.wait(); } catch (InterruptedException e1) {log.error(e1.toString());} // join을 실행하면 멈춘다(다음 Line으로 넘어가지 않음 )
-//            	log.info("thread.yield() 실행");
-        		this.thread.yield();
+            	log.info( String.format( "Pre wait Thread Status : %s %s", this.thread.getName(), this.thread.getState().name() ));
+//        		try { this.thread.join(); } catch (InterruptedException e1) {log.error(e1.toString());} // join을 실행하면 멈춘다(다음 Line으로 넘어가지 않음 )
+//        		this.thread.yield();
         		
-            	log.info( String.format( "After Join Thread Status : %s", this.thread.getState().name() ));
+            	synchronized ( this.thread ) {
+            		try {
+                    	log.info("thread.wait() 실행");
+						thread.wait();
+						log.info("thread.wait() 실행 완료");
+					} catch (InterruptedException e) {
+						log.error(e.toString());
+					}
+            	}
+            	log.info( String.format( "After wait Thread Status : %s", this.thread.getState().name() ));
         	}
         	
         	if ( this.thread.getState().compareTo( State.TERMINATED ) == 0) break;
-        	
-            try { log.info( this.thread.getState().toString() ); Thread.sleep(500);} catch (InterruptedException e) {}
+            try { log.info( String.format( "%s status : %S", this.thread.getName(), this.thread.getState().toString() )); Thread.sleep(2000);} catch (InterruptedException e) {}
         }
-		log.info("End Thread");
+		log.info( String.format("%s Thread State : %s --> End Thread", this.thread.getName(), this.thread.getState().name() ));
+		this.thread = null;
 	}
 
     /** 컨텍스트 종료 시 thread를 종료시킨다 */
@@ -113,7 +146,7 @@ public class ThredServiceImpl implements ThreadService, ServletContextListener, 
         try
         {
             this.thread.join();
-            this.thread = null;
+//            this.thread = null;
         } catch (InterruptedException ie) {
             log.error(ie.toString());
         }
