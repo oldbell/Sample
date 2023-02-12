@@ -49,27 +49,30 @@ public class HelloController {
 	}
 	
 	@RequestMapping("/start")
-	public void TestRunning()
+	public String TestRunning()
 	{
 //		oT.setName("T1");
 //		oT2.setName("T2");
 		
 		oT.start();
 		oT2.start();
+		return commonData();
 	}
 	
 	@RequestMapping("/stop")
-	public void TestStop()
+	public String TestStop()
 	{
 		oT.stop();
+		return commonData();
 	}
 	
 	
 	@RequestMapping("/end")
-	public void TestEnd()
+	public String TestEnd()
 	{
 		oT.end();
 		oT2.end();
+		return commonData();
 	}
 	
 	
@@ -113,5 +116,14 @@ public class HelloController {
 		return "redirect:/info";
 	}
 	
+
+	private String commonData()
+	{
+		String r = String.format("<h3><a href='/start'>start</a><br>")
+				+ String.format("<a href='/stop'>stop</a><br>")
+				+ String.format("<a href='/end'>end</a></h3>");
+		return r;
+	              
+	}
 	
 }

@@ -101,7 +101,9 @@ public class ThredServiceImpl implements ThreadService, ServletContextListener, 
     
     public void end()
     {
-    	log.info( String.format( "----- %s try thread end()", this.thread.getName() ));
+    	String threadName = "nothing";
+    	if ( this.thread != null ) name = this.thread.getName();
+    	log.info( String.format( "----- %s try thread end()", threadName ));
     	this.work = false;
     	this.isShutdown = true;
     }
@@ -150,6 +152,8 @@ public class ThredServiceImpl implements ThreadService, ServletContextListener, 
         } catch (InterruptedException ie) {
             log.error(ie.toString());
         }
-    }	
+    }
+    
+    
 	
 }
