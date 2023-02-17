@@ -49,7 +49,7 @@ public class HelloController {
 	}
 	
 	@RequestMapping("/start")
-	public String TestRunning()
+	public String testRunning()
 	{
 //		oT.setName("T1");
 //		oT2.setName("T2");
@@ -60,7 +60,7 @@ public class HelloController {
 	}
 	
 	@RequestMapping("/stop")
-	public String TestStop()
+	public String testStop()
 	{
 		oT.stop();
 		return commonData();
@@ -68,7 +68,7 @@ public class HelloController {
 	
 	
 	@RequestMapping("/end")
-	public String TestEnd()
+	public String testEnd()
 	{
 		oT.end();
 		oT2.end();
@@ -95,7 +95,7 @@ public class HelloController {
 	       RedirectView redirectView = new RedirectView();
 	       redirectView.setUrl("http://localhost:8085/info?from=ex_redirect4");
 	       return redirectView;
-	   }	   
+	   }
 	
 	   // httpHeaders
 	   @RequestMapping("/ex_redirect5")
