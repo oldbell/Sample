@@ -2,12 +2,12 @@ package com.example.demo.mv.service;
 
 import java.lang.Thread.State;
 
-import javax.servlet.ServletContext;
+//import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-import org.springframework.stereotype.Service;
+//import org.springframework.stereotype.Service;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -30,7 +30,7 @@ public class ThredServiceImpl implements ThreadService, ServletContextListener, 
     private String name ;
     
     /** context */
-    private ServletContext sc;    
+//    private ServletContext sc;    
     
     
     public ThredServiceImpl()
@@ -47,7 +47,7 @@ public class ThredServiceImpl implements ThreadService, ServletContextListener, 
     public void contextInitialized (ServletContextEvent event) {
     	
         log.info("== DaemonListener.contextInitialized has been called. ==");
-        sc = event.getServletContext();
+//        sc = event.getServletContext();
         this.start();
     }    
     
@@ -143,7 +143,7 @@ public class ThredServiceImpl implements ThreadService, ServletContextListener, 
     /** 컨텍스트 종료 시 thread를 종료시킨다 */
     public void contextDestroyed (ServletContextEvent event) {
     	
-        this.log.info ("== DaemonListener.contextDestroyed has been called. ==");
+        log.info ("== DaemonListener.contextDestroyed has been called. ==");
         this.isShutdown = true;
         try
         {

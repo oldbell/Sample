@@ -35,6 +35,13 @@ public class HelloController {
 		return "Hello World";
 	}
 	
+	@RequestMapping("/shutdown")
+	public String shutdown()
+	{
+		this.oT.setShutdown(true);
+		this.oT2.setShutdown(true);
+		return commonData();
+	}
 	
 	/**
 	 * p29
@@ -45,15 +52,12 @@ public class HelloController {
 	{
 		String from= req.getParameter("from");
 		if ( from == null ) from = "";
-		return "info - from :" + from;
+		return "info - from :" + from + "<hr>" + commonData() ;
 	}
 	
 	@RequestMapping("/start")
 	public String testRunning()
 	{
-//		oT.setName("T1");
-//		oT2.setName("T2");
-		
 		oT.start();
 		oT2.start();
 		return commonData();
@@ -66,7 +70,6 @@ public class HelloController {
 		return commonData();
 	}
 	
-	
 	@RequestMapping("/end")
 	public String testEnd()
 	{
@@ -74,7 +77,6 @@ public class HelloController {
 		oT2.end();
 		return commonData();
 	}
-	
 	
 	// return ModelAndView
 	@GetMapping("/redirect_modelview")
@@ -119,9 +121,12 @@ public class HelloController {
 
 	private String commonData()
 	{
-		String r = String.format("<h3><a href='/start'>start</a><br>")
+		String r = String.format("<h3>")
+				+ String.format("<a href='/start'>start</a><br>")
 				+ String.format("<a href='/stop'>stop</a><br>")
-				+ String.format("<a href='/end'>end</a></h3>");
+				+ String.format("<a href='/end'>end</a><br>")
+				+ String.format("<a href='/shutdown'>shutdown</a>")
+				+ String.format("</h3>");
 		return r;
 	              
 	}
