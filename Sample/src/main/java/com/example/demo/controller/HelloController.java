@@ -55,23 +55,35 @@ public class HelloController {
 		return "info - from :" + from + "<hr>" + commonData() ;
 	}
 	
+	/**
+	 * Thread를 둘다 시작함
+	 * @return
+	 */
 	@RequestMapping("/start")
-	public String testRunning()
+	public String start() 
 	{
 		oT.start();
 		oT2.start();
 		return commonData();
 	}
 	
+	/**
+	 * Thread 중 하나를 중지함
+	 * @return
+	 */
 	@RequestMapping("/stop")
-	public String testStop()
+	public String stop() 
 	{
 		oT.stop();
 		return commonData();
 	}
 	
+	/**
+	 * 종료 처리
+	 * @return
+	 */
 	@RequestMapping("/end")
-	public String testEnd()
+	public String end() 
 	{
 		oT.end();
 		oT2.end();
@@ -80,20 +92,20 @@ public class HelloController {
 	
 	// return ModelAndView
 	@GetMapping("/redirect_modelview")
-	public ModelAndView exRedirect2() {
+	public ModelAndView redirect_modelview() {
 		String projectUrl = "http://localhost:8085/info?from=redirect_modelview";
 		return new ModelAndView("redirect:" + projectUrl);
 	}	
 	
 	   // httpServletResponse.sendRedirect
 	   @GetMapping("/redirect_reseponse")
-	   public void exRedirect3(HttpServletResponse httpServletResponse) throws IOException {
+	   public void redirect_response(HttpServletResponse httpServletResponse) throws IOException {
 	       httpServletResponse.sendRedirect("http://localhost:8085/info?from=redirect_response");
 	   }	
 
 	   // RedirectView 
 	   @RequestMapping("/ex_redirect4")
-	   public RedirectView exRedirect4() {
+	   public RedirectView ex_redirect4() {
 	       RedirectView redirectView = new RedirectView();
 	       redirectView.setUrl("http://localhost:8085/info?from=ex_redirect4");
 	       return redirectView;
@@ -101,7 +113,7 @@ public class HelloController {
 	
 	   // httpHeaders
 	   @RequestMapping("/ex_redirect5")
-	   public ResponseEntity<Object> exRedirect5() throws URISyntaxException {
+	   public ResponseEntity<Object> ex_redirect5() throws URISyntaxException {
 	       URI redirectUri = new URI("http://localhost:8085/info?from=ex_redirect4");
 	       HttpHeaders httpHeaders = new HttpHeaders();
 	       httpHeaders.setLocation(redirectUri);
